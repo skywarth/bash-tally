@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# base is from this lad: https://www.cubicrace.com/2016/03/log-tracing-mechnism-for-shell-scripts.html
+# Thanks
+
+
 echo "logger run"
 logLocation=$1
 if [ -z $logLocation ]
