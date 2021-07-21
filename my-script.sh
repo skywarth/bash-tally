@@ -6,9 +6,19 @@ dot ./logger.sh ./logHere.log
 
 
 
-#SCRIPTENTRY
+getDateTimeNow(){
+  echo "$(date +"%Y-%m-%d @ %r # %Z")"
+}
+#datum=$(date +"%Y-%m-%d @ %r # %Z")
+
+Tally_testEntry
+exit
+
+SCRIPTENTRY
 INFO "Updating user details..."
 ERROR "aaaa"
+test
+SCRIPTEXIT
 
 echo "done"
 

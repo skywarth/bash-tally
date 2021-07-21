@@ -4,19 +4,35 @@
 # Thanks
 
 
-echo "logger run"
+
 logLocation=$1
 if [ -z $logLocation ]
 then
 logLocation=/home/$(logname)/default_logs.log
 fi
 
-echo $logLocation
 
 SCRIPT_LOG=$logLocation
 
 touch $SCRIPT_LOG
 chmod 777 $logLocation
+
+echo "bash-tally loaded for target ${logLocation}"
+
+
+_getDateTimeNow(){
+  echo "$(date +"%Y-%m-%d @ %r # %Z")"
+}
+
+_getEntryPrefix(){
+   script_name=`basename "$0"`
+ script_name="${script_name%.*}"
+  echo "[$(_getDateTimeNow)] [TEST] {$script_name} > aaa"
+}
+
+Tally_testEntry(){
+  echo "$(_getEntryPrefix)" >> $SCRIPT_LOG
+}
 
 SCRIPTENTRY (){
  timeAndDate=`date`
@@ -36,13 +52,6 @@ ENTRY (){
  timeAndDate=`date`
  echo "[$timeAndDate] [DEBUG]  > $cfn $FUNCNAME" >> $SCRIPT_LOG
 }
-
-EXIT (){
- local cfn="${FUNCNAME[1]}"
- timeAndDate=`date`
- echo "[$timeAndDate] [DEBUG]  < $cfn $FUNCNAME" >> $SCRIPT_LOG
-}
-
 
 INFO (){
  local function_name="${FUNCNAME[1]}"
@@ -64,4 +73,8 @@ ERROR (){
     local msg="$1"
     timeAndDate=`date`
     echo "[$timeAndDate] [ERROR]  $msg" >> $SCRIPT_LOG
+}
+
+test (){
+  echo `date`
 }
