@@ -2,7 +2,7 @@
 
 
 dot() { file=$1; shift; . "$file"; }
-dot ./logger.sh ./logHere.log
+dot ./tally.sh ./logHere.log
 
 
 
