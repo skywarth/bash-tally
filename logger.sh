@@ -3,13 +3,15 @@
 # base is from this lad: https://www.cubicrace.com/2016/03/log-tracing-mechnism-for-shell-scripts.html
 # Thanks
 
-
+availableLogTypes=('DEBUG' 'INFO' 'WARN' 'ERROR' 'FATAL' 'BEGIN' 'END')
 
 logLocation=$1
+logScriptEntry=$2 # used far below
 if [ -z $logLocation ]
 then
 logLocation=/home/$(logname)/default_logs.log
 fi
+
 
 
 SCRIPT_LOG=$logLocation
@@ -24,57 +26,54 @@ _getDateTimeNow(){
   echo "$(date +"%Y-%m-%d @ %r # %Z")"
 }
 
-_getEntryPrefix(){
-   script_name=`basename "$0"`
- script_name="${script_name%.*}"
-  echo "[$(_getDateTimeNow)] [TEST] {$script_name} > aaa"
+_createEntry(){
+logType=${1:-UNKNOWN}
+message=${2:-(NO MESSAGE)}
+
+script_name=`basename "$0"`
+script_name="${script_name%.*}"
+echo "[$(_getDateTimeNow)] [${logType}] {$script_name} > ${message}" >> $SCRIPT_LOG
 }
+
 
 Tally_testEntry(){
-  echo "$(_getEntryPrefix)" >> $SCRIPT_LOG
-}
-
-SCRIPTENTRY (){
- timeAndDate=`date`
- script_name=`basename "$0"`
- script_name="${script_name%.*}"
- echo "[$timeAndDate] [DEBUG]  > $script_name $FUNCNAME" >> $SCRIPT_LOG
-}
-
-SCRIPTEXIT (){
- script_name=`basename "$0"`
- script_name="${script_name%.*}"
- echo "[$timeAndDate] [DEBUG]  < $script_name $FUNCNAME" >> $SCRIPT_LOG
-}
-
-ENTRY (){
- local cfn="${FUNCNAME[1]}"
- timeAndDate=`date`
- echo "[$timeAndDate] [DEBUG]  > $cfn $FUNCNAME" >> $SCRIPT_LOG
-}
-
-INFO (){
- local function_name="${FUNCNAME[1]}"
-    local msg="$1"
-    timeAndDate=`date`
-    echo "[$timeAndDate] [INFO]  $msg" >> $SCRIPT_LOG
+  _createEntry DEBUG "yo whaddup"
 }
 
 
-DEBUG (){
- local function_name="${FUNCNAME[1]}"
-    local msg="$1"
-    timeAndDate=`date`
- echo "[$timeAndDate] [DEBUG]  $msg" >> $SCRIPT_LOG
+Tally_entry (){ #for general use
+  _createEntry "$1" "$2"
 }
 
-ERROR (){
- local function_name="${FUNCNAME[1]}"
-    local msg="$1"
-    timeAndDate=`date`
-    echo "[$timeAndDate] [ERROR]  $msg" >> $SCRIPT_LOG
+Tally_debug (){
+    _createEntry DEBUG "$1"
 }
 
-test (){
-  echo `date`
+Tally_info (){
+    _createEntry INFO "$1"
 }
+Tally_warn (){
+    _createEntry warn "$1"
+}
+
+Tally_error (){
+    _createEntry ERROR "$1"
+}
+
+Tally_fatal (){
+    _createEntry FATAL "$1"
+}
+
+Tally_scriptBegin (){
+  _createEntry BEGIN "Script execution started"
+}
+
+Tally_scriptEnd (){
+ _createEntry END "Script execution ended"
+}
+
+
+if [[ $logScriptEntry == "log-script-begin" ]]
+then
+Tally_scriptBegin
+fi

@@ -11,8 +11,11 @@ getDateTimeNow(){
 }
 #datum=$(date +"%Y-%m-%d @ %r # %Z")
 
-Tally_testEntry
+# Tally_testEntry
+Tally_entry FATAL "qqqqqq"
+Tally_scriptEnd
 exit
+
 
 SCRIPTENTRY
 INFO "Updating user details..."
