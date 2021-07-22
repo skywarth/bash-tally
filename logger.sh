@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# base is from this lad: https://www.cubicrace.com/2016/03/log-tracing-mechnism-for-shell-scripts.html
+# inspired from this lad: https://www.cubicrace.com/2016/03/log-tracing-mechnism-for-shell-scripts.html
 # Thanks
 
 availableLogTypes=('DEBUG' 'INFO' 'WARN' 'ERROR' 'FATAL' 'BEGIN' 'END')
@@ -14,9 +14,9 @@ fi
 
 
 
-SCRIPT_LOG=$logLocation
 
-touch $SCRIPT_LOG
+
+touch $logLocation
 chmod 777 $logLocation
 
 echo "bash-tally loaded for target ${logLocation}"
@@ -32,7 +32,7 @@ message=${2:-(NO MESSAGE)}
 
 script_name=`basename "$0"`
 script_name="${script_name%.*}"
-echo "[$(_getDateTimeNow)] [${logType}] {$script_name} > ${message}" >> $SCRIPT_LOG
+echo "[$(_getDateTimeNow)] [${logType}] {$script_name} > ${message}" >> $logLocation
 }
 
 
